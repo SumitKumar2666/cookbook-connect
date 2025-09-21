@@ -1,0 +1,156 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  email: String!
+  username: String!
+  firstName: String!
+  lastName: String!
+  bio: String
+  avatar: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type AuthPayload {
+  access_token: String!
+  user: User!
+}
+
+type Ingredient {
+  id: ID!
+  name: String!
+  quantity: String!
+  unit: String
+}
+
+type Instruction {
+  id: ID!
+  step: Int!
+  content: String!
+}
+
+type Rating {
+  id: ID!
+  value: Int!
+  createdAt: DateTime!
+  user: User!
+}
+
+type Comment {
+  id: ID!
+  content: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
+}
+
+type Recipe {
+  id: ID!
+  title: String!
+  description: String
+  cuisine: String
+  difficulty: String!
+  cookingTime: Int!
+  servings: Int!
+  imageUrl: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  author: User!
+  ingredients: [Ingredient!]!
+  instructions: [Instruction!]!
+  ratings: [Rating!]!
+  comments: [Comment!]!
+  averageRating: Float!
+  totalRatings: Int!
+}
+
+type SearchResult {
+  recipes: [Recipe!]!
+  total: Int!
+}
+
+type Query {
+  me: User!
+  user(id: String!): User!
+  recipes(filters: RecipeFilters, skip: Int! = 0, take: Int! = 20): [Recipe!]!
+  recipe(id: String!): Recipe!
+  userFeed(skip: Int! = 0, take: Int! = 20): [Recipe!]!
+  searchRecipes(query: String, filters: RecipeFilters, skip: Int! = 0, take: Int! = 20): SearchResult!
+  ingredientSuggestions(query: String!, limit: Int! = 10): [String!]!
+  cookWithWhatIHave(ingredients: [String!]!, limit: Int! = 20): SearchResult!
+}
+
+input RecipeFilters {
+  cuisine: String
+  difficulty: String
+  maxCookingTime: Int
+  ingredients: [String!]
+  minRating: Float
+}
+
+type Mutation {
+  login(input: LoginInput!): AuthPayload!
+  register(input: CreateUserInput!): AuthPayload!
+  followUser(userId: String!): Boolean!
+  unfollowUser(userId: String!): Boolean!
+  createRecipe(input: CreateRecipeInput!): Recipe!
+  updateRecipe(id: String!, input: UpdateRecipeInput!): Recipe!
+  deleteRecipe(id: String!): Boolean!
+  rateRecipe(recipeId: String!, value: Int!): Rating!
+  commentOnRecipe(recipeId: String!, content: String!): Comment!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input CreateUserInput {
+  email: String!
+  username: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+  bio: String
+}
+
+input CreateRecipeInput {
+  title: String!
+  description: String
+  cuisine: String
+  difficulty: String!
+  cookingTime: Int!
+  servings: Int!
+  imageUrl: String
+  ingredients: [CreateIngredientInput!]!
+  instructions: [CreateInstructionInput!]!
+}
+
+input CreateIngredientInput {
+  name: String!
+  quantity: String!
+  unit: String
+}
+
+input CreateInstructionInput {
+  step: Int!
+  content: String!
+}
+
+input UpdateRecipeInput {
+  title: String
+  description: String
+  cuisine: String
+  difficulty: String
+  cookingTime: Int
+  servings: Int
+  imageUrl: String
+}

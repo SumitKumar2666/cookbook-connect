@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
+      - REDIS_URL=${REDIS_URL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - postgres
+      - elasticsearch
+      - redis
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: cookbook_connect
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  postgres_data:
