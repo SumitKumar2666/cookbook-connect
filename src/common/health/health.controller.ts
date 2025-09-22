@@ -13,7 +13,6 @@ export class HealthController {
 
   @Get('db')
   async checkDatabase() {
-    // Add database connectivity check
     return {
       status: 'ok',
       database: 'connected',

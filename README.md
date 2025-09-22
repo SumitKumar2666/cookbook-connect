@@ -1,98 +1,439 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🍳 CookBook Connect - Recipe Sharing Platform
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A comprehensive recipe sharing platform built with NestJS, GraphQL, PostgreSQL, Elasticsearch, and AI integration.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Features
 
-## Description
+- **Recipe Management**: Full CRUD operations for recipes with ingredients and instructions
+- **Real-time Updates**: Live notifications for ratings, comments, and new recipes
+- **Advanced Search**: Elasticsearch-powered search with ingredient matching
+- **AI Enhancement**: OpenAI integration for recipe improvements and suggestions
+- **Social Features**: User following, ratings, comments, and activity feeds
+- **Authentication**: JWT-based secure authentication
+- **GraphQL API**: Comprehensive GraphQL schema with subscriptions
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📋 Prerequisites
 
-## Project setup
+- Node.js 18+ 
+- Docker & Docker Compose
+- Git
+
+## 🛠️ Installation & Setup
+
+### 1. Clone and Initialize Project
 
 ```bash
-$ npm install
+# Clone repository
+git clone <your-repo-url>
+cd cookbook-connect
+
+# Install dependencies
+npm install
+
+# Setup environment
+cp .env.example .env
+# Edit .env with your configuration
 ```
 
-## Compile and run the project
+### 2. Start Infrastructure Services
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+# Start PostgreSQL, Elasticsearch, and Redis
+docker-compose up -d
+# or
+docket compose up -d
 ```
 
-## Run tests
+### 3. Setup Database
 
 ```bash
-# unit tests
-$ npm run test
+# Generate Prisma client
+npx prisma generate
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Run database migrations
+npx prisma migrate dev --name init
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 4. Start Development Server
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+🎉 **Server runs on**: `http://localhost:3000`  
+📊 **GraphQL Playground**: `http://localhost:3000/graphql`
 
-## Resources
+## 📊 GraphQL API Examples
 
-Check out a few resources that may come in handy when working with NestJS:
+### Authentication
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```graphql
+# Register
+mutation {
+  register(input: {
+    email: "user@example.com"
+    username: "chef123"
+    firstName: "John"
+    lastName: "Doe"
+    password: "password123"
+  }) {
+    access_token
+    user {
+      id
+      username
+      email
+    }
+  }
+}
 
-## Support
+# Login
+mutation {
+  login(input: {
+    email: "user@example.com"
+    password: "password123"
+  }) {
+    access_token
+    user {
+      id
+      username
+    }
+  }
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Recipe Operations
 
-## Stay in touch
+```graphql
+# Create Recipe
+mutation {
+  createRecipe(input: {
+    title: "Pasta Carbonara"
+    description: "Classic Italian pasta dish"
+    cuisine: "Italian"
+    difficulty: "MEDIUM"
+    cookingTime: 30
+    servings: 4
+    ingredients: [
+      { name: "Spaghetti", quantity: "400g" }
+      { name: "Bacon", quantity: "200g" }
+      { name: "Eggs", quantity: "3", unit: "pieces" }
+      { name: "Parmesan", quantity: "100g" }
+    ]
+    instructions: [
+      { step: 1, content: "Cook pasta according to package instructions" }
+      { step: 2, content: "Fry bacon until crispy" }
+      { step: 3, content: "Mix eggs with parmesan" }
+      { step: 4, content: "Combine everything while pasta is hot" }
+    ]
+  }) {
+    id
+    title
+    averageRating
+    author {
+      username
+    }
+  }
+}
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# Search Recipes
+query {
+  searchRecipes(
+    query: "pasta"
+    filters: {
+      cuisine: "Italian"
+      maxCookingTime: 45
+      ingredients: ["pasta", "cheese"]
+    }
+  ) {
+    recipes {
+      id
+      title
+      cookingTime
+      averageRating
+      ingredients {
+        name
+        quantity
+      }
+    }
+    total
+  }
+}
 
-## License
+# Cook with Available Ingredients
+query {
+  cookWithWhatIHave(ingredients: ["chicken", "rice", "vegetables"]) {
+    recipes {
+      id
+      title
+      averageRating
+      ingredients {
+        name
+        quantity
+      }
+    }
+  }
+}
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### AI Features
+
+```graphql
+# Get Recipe Improvements
+query {
+  getRecipeImprovements(recipeId: "recipe-id") # Returns array of suggestions
+}
+
+# Ingredient Substitutions
+query {
+  getIngredientSubstitutions(
+    ingredient: "butter"
+    dietaryRestrictions: ["vegan", "lactose-free"]
+  ) {
+    substitute
+    notes
+  }
+}
+
+# Wine & Side Pairings
+query {
+  getRecipePairings(recipeId: "recipe-id") {
+    wines
+    sides
+  }
+}
+```
+
+### Real-time Features
+
+```javascript
+// WebSocket Connection (Frontend)
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:3000', {
+  auth: {
+    token: 'your-jwt-token'
+  }
+});
+
+// Join recipe room for live updates
+socket.emit('join_recipe', 'recipe-id');
+
+// Listen for new ratings
+socket.on('new_rating', (data) => {
+  console.log('New rating:', data.rating);
+});
+
+// Listen for new comments
+socket.on('new_comment', (data) => {
+  console.log('New comment:', data.comment);
+});
+
+// Listen for new recipes from followed users
+socket.on('new_recipe', (data) => {
+  console.log('New recipe from followed user:', data.recipe);
+});
+```
+
+## 🏗️ Architecture
+
+### Technology Stack
+
+- **Backend**: NestJS with TypeScript
+- **API**: GraphQL with Apollo Server
+- **Database**: PostgreSQL with Prisma ORM
+- **Search**: Elasticsearch
+- **Real-time**: WebSocket + Redis Pub/Sub
+- **AI**: OpenAI GPT-3.5
+- **Authentication**: JWT with Passport
+
+### Project Structure
+
+```
+src/
+├── modules/
+│   ├── auth/           # Authentication & authorization
+│   ├── users/          # User management
+│   ├── recipes/        # Recipe CRUD operations
+│   ├── search/         # Elasticsearch integration
+│   ├── realtime/       # WebSocket & real-time features
+│   └── ai/             # OpenAI integration
+├── common/
+│   ├── prisma/         # Database service
+│   └── health/         # Health checks
+└── main.ts
+```
+
+### Database Schema
+
+```mermaid
+erDiagram
+    User ||--o{ Recipe : creates
+    User ||--o{ Rating : gives
+    User ||--o{ Comment : writes
+    User ||--o{ Follow : follows
+    Recipe ||--o{ Ingredient : contains
+    Recipe ||--o{ Instruction : has
+    Recipe ||--o{ Rating : receives
+    Recipe ||--o{ Comment : receives
+    
+    User {
+        string id PK
+        string email UK
+        string username UK
+        string firstName
+        string lastName
+        string bio
+        string avatar
+        string password
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    Recipe {
+        string id PK
+        string title
+        string description
+        string cuisine
+        string difficulty
+        int cookingTime
+        int servings
+        string imageUrl
+        string authorId FK
+        datetime createdAt
+        datetime updatedAt
+    }
+```
+
+## 🚀 Deployment
+
+### Environment Variables
+
+```env
+# Database
+DATABASE_URL="postgresql://user:pass@host:5432/dbname"
+
+# JWT
+JWT_SECRET="your-secret-key"
+JWT_EXPIRES_IN="7d"
+
+# Services
+ELASTICSEARCH_URL="http://localhost:9200"
+REDIS_URL="redis://localhost:6379"
+OPENAI_API_KEY="your-openai-key"
+
+# App
+PORT=3000
+NODE_ENV=production
+```
+
+## 🧪 Testing
+
+```bash
+# Unit tests
+npm run test
+
+# E2E tests
+npm run test:e2e
+
+# Test coverage
+npm run test:cov
+
+# Test specific module
+npm run test -- --testPathPattern=recipes
+```
+
+## 📊 Performance
+
+### Optimization Features
+
+- **Database**: Prisma query optimization with proper indexing
+- **Search**: Elasticsearch with result caching
+- **Real-time**: Redis pub/sub for horizontal scaling
+- **API**: GraphQL query complexity analysis
+- **Caching**: Redis caching for AI responses
+
+### Monitoring
+
+```bash
+# Health checks
+curl http://localhost:3000/health
+curl http://localhost:3000/health/db
+
+# GraphQL introspection
+curl -X POST http://localhost:3000/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ __schema { types { name } } }"}'
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m "feat: add amazing feature"`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open Pull Request
+
+### Commit Convention
+
+- `feat:` new features
+- `fix:` bug fixes
+- `docs:` documentation updates
+- `style:` formatting changes
+- `refactor:` code refactoring
+- `test:` adding tests
+- `chore:` maintenance tasks
+
+## 📝 API Documentation
+
+Full GraphQL schema available at `/graphql` endpoint when server is running.
+
+### Key Endpoints
+
+- **GraphQL**: `/graphql` - Main API endpoint
+- **Health**: `/health` - Service health check
+- **WebSocket**: `/socket.io` - Real-time connections
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Database Connection Error**
+   ```bash
+   # Check PostgreSQL status
+   docker-compose ps
+   # Restart services
+   docker-compose restart postgres
+   ```
+
+2. **Elasticsearch Not Starting**
+   ```bash
+   # Increase memory limit
+   docker run -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" elasticsearch:8.8.0
+   ```
+
+3. **WebSocket Connection Failed**
+   ```bash
+   # Check Redis connection
+   redis-cli ping
+   # Verify JWT token in WebSocket auth
+   ```
+
+4. **Prisma Migration Issues**
+   ```bash
+   # Reset database (development only)
+   npx prisma migrate reset
+   # Force push schema
+   npx prisma db push --force-reset
+   ```
+
+## 📄 License
+
+MIT License - see LICENSE file for details.
+
+## 👨‍💻 Author
+
+Built with ❤️ for the CookBook Connect challenge.
+
+---
+
+**🎉 Happy Cooking & Coding!**
